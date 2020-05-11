@@ -43,6 +43,7 @@ public class Decadev {
     @ElementCollection
     private List<String> technologies = new ArrayList<>();
 
+    private String level;
     private String githubUsername;
     private String portfolio;
     private String photoUrl;
@@ -135,6 +136,14 @@ public class Decadev {
 
     public void setTechnologies(List<String> technologies) {
         this.technologies = technologies;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getGithubUsername() {

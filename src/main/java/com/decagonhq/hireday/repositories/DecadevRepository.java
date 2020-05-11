@@ -11,5 +11,7 @@ public interface DecadevRepository extends CrudRepository<Decadev, Long> {
 
     Optional<Decadev> findByDecaId(String decaId);
 
+    Iterable<Decadev> findAllByStack(String stack);
+
     void deleteByDecaId(String decaId);
 }

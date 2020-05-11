@@ -42,6 +42,12 @@ public class DecadevController {
         return new ResponseEntity<>(decadev, HttpStatus.OK);
     }
 
+    @GetMapping("/stacks/{stack}")
+    public ResponseEntity<Iterable<?>> getDecadevsByStack(@PathVariable("stack") String stack) {
+        Iterable<Decadev> decadevs = decadevService.getDecadevsByStack(stack);
+        return new ResponseEntity<>(decadevs, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<Iterable<?>> getAllDecadevs() {
         Iterable<Decadev> decadevs = decadevService.getAllDecadevs();

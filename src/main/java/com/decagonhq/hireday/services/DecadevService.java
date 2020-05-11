@@ -39,6 +39,10 @@ public class DecadevService {
         throw new DecadevNotFoundException("Decadev with ID number '" + decaId + "' could not be found");
     }
 
+    public Iterable<Decadev> getDecadevsByStack(String stack) {
+        return decadevRepository.findAllByStack(stack);
+    }
+
     public Iterable<Decadev> getAllDecadevs() {
         return decadevRepository.findAll();
     }
