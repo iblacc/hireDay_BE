@@ -32,7 +32,7 @@ public class DecadevController {
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Decadev decadev1 = decadevService.createOrUpdateDecadev(decadev);
+        Decadev decadev1 = decadevService.createDecadev(decadev);
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 
@@ -60,7 +60,7 @@ public class DecadevController {
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Decadev decadev1 = decadevService.createOrUpdateDecadev(decadev);
+        Decadev decadev1 = decadevService.updateDecadev(decadev);
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 

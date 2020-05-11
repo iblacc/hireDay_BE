@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IdentificationRepository extends CrudRepository<Identification, Long> {
+
+    boolean existsIdentificationByDecaId(String decaId);
 }
