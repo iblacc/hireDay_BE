@@ -1,0 +1,13 @@
+#spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#spring.datasource.driver-class-name=org.postgresql.Driver
+#spring.jpa.show-sql=true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hire_day_db
+    username: postgres
+    password: 250790
+
+  jpa:
+    hibernate:
+      ddl-auto: update

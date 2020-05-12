@@ -1,0 +1,12 @@
+server:
+  port: 5000
+
+spring:
+  datasource:
+    url: jdbc:postgresql://hiredaydb.ckzr4j0zspt4.us-east-2.rds.amazonaws.com:5432/hire_day_db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
