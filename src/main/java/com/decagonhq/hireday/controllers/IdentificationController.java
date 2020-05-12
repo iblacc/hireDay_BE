@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("api/ids")
+@RequestMapping("api/v1/ids")
 @CrossOrigin
 public class IdentificationController {
 
@@ -27,17 +27,17 @@ public class IdentificationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createId (@Valid @RequestBody Identification identification, BindingResult result) {
+    public ResponseEntity<?> createIdentification (@Valid @RequestBody Identification identification, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Identification identification1 = identificationService.createOrUpdateIdentification(identification);
+        Identification identification1 = identificationService.createIdentification(identification);
         return new ResponseEntity<>(identification1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getIdentification(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getIdentification(@PathVariable("id") long id) {
         Identification identification = identificationService.getIdentification(id);
         return new ResponseEntity<>(identification, HttpStatus.OK);
     }
@@ -48,8 +48,14 @@ public class IdentificationController {
         return new ResponseEntity<>(identifications, HttpStatus.OK);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateIdentification(@PathVariable("id") long id, @Valid @RequestBody Identification identification) {
+        Identification identification1 = identificationService.updatedentification(id, identification);
+        return new ResponseEntity<>(identification1, HttpStatus.OK);
+    }
+
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteDecadev(@PathVariable("id") Long id) {
+    public ResponseEntity<?> deleteIdentification(@PathVariable("id") long id) {
         identificationService.deleteIdentification(id);
         return new ResponseEntity<>("Identification with ID '" + id + "' was deleted", HttpStatus.OK);
     }

@@ -19,4 +19,18 @@ public class ApiExceptionHandler {
         DecadevNotFoundExceptionResponse response = new DecadevNotFoundExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(OrganizationException.class)
+    protected ResponseEntity<Object> handleOrganizationNameException(OrganizationException ex) {
+        OrganizationExceptionResponse response = new OrganizationExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EmployerNotFoundException.class)
+    protected ResponseEntity<Object> handleEmployerNotFoundException(EmployerNotFoundException ex) {
+        EmployerNotFoundExceptionResponse response = new EmployerNotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

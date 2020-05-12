@@ -1,18 +1,18 @@
 package com.decagonhq.hireday.exceptions;
 
-public class OrganizationNameExceptionResponse {
+public class OrganizationExceptionResponse {
 
-    private String organizationName;
+    private String organizationException;
 
-    public OrganizationNameExceptionResponse(String organizationName) {
-        this.organizationName = organizationName;
+    public OrganizationExceptionResponse(String organizationException) {
+        this.organizationException = organizationException;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
+    public String getOrganizationException() {
+        return organizationException;
     }
 
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+    public void setOrganizationException(String organizationException) {
+        this.organizationException = organizationException;
     }
 }

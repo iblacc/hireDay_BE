@@ -52,23 +52,20 @@ public class DecadevService {
         return decadevRepository.findAll();
     }
 
-    public Decadev updateDecadev(Decadev decadev) {
+    public Decadev updateDecadev(String decaId, Decadev decadev) {
 
-        if(decadev.getId() == null) {
-            return createDecadev(decadev);
-        }
-
-        Optional<Decadev> decadev1 = decadevRepository.findById(decadev.getId());
+        Optional<Decadev> decadev1 = decadevRepository.findByDecaId(decaId);
         if(decadev1.isEmpty()) {
             throw new DecadevNotFoundException("Decadev could not be found");
         }
 
         Decadev foundDecadev = decadev1.get();
-        if(foundDecadev.getDecaId().equals(decadev.getDecaId()) && foundDecadev.getEmail().equals(decadev.getEmail())) {
+
+        if(foundDecadev.getEmail().equals(decadev.getEmail())) {
             return decadevRepository.save(decadev);
         }
 
-        throw new DecadevIdException("Decadev ID and/or email could not be updated");
+        throw new DecadevIdException("Decadev ID and/or email did not match");
     }
 
     public void deleteDecadev(String decaId) {

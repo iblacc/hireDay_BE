@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/decadevs")
+@RequestMapping("api/v1/decadevs")
 @CrossOrigin
 public class DecadevController {
 
@@ -54,13 +54,13 @@ public class DecadevController {
         return new ResponseEntity<>(decadevs, HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<?> updateDecadev(@Valid @RequestBody Decadev decadev, BindingResult result) {
+    @PutMapping("{stackId}")
+    public ResponseEntity<?> updateDecadev(@PathVariable("stackId") String decaId, @Valid @RequestBody Decadev decadev, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Decadev decadev1 = decadevService.updateDecadev(decadev);
+        Decadev decadev1 = decadevService.updateDecadev(decaId ,decadev);
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 
