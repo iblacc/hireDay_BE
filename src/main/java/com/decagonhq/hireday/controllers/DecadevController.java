@@ -1,7 +1,11 @@
 package com.decagonhq.hireday.controllers;
 
+import com.decagonhq.hireday.dto.LoginDTO;
+import com.decagonhq.hireday.dto.RegisterDTO;
 import com.decagonhq.hireday.entities.Decadev;
+import com.decagonhq.hireday.entities.Identification;
 import com.decagonhq.hireday.services.DecadevService;
+import com.decagonhq.hireday.services.IdentificationService;
 import com.decagonhq.hireday.services.RequestBodyValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/decadevs")
@@ -18,12 +21,34 @@ import java.util.List;
 public class DecadevController {
 
     private DecadevService decadevService;
+    private IdentificationService identificationService;
     private RequestBodyValidationService requestBodyValidationService;
 
     @Autowired
-    public DecadevController(DecadevService decadevService, RequestBodyValidationService requestBodyValidationService) {
+    public DecadevController(DecadevService decadevService, IdentificationService identificationService, RequestBodyValidationService requestBodyValidationService) {
         this.decadevService = decadevService;
+        this.identificationService = identificationService;
         this.requestBodyValidationService = requestBodyValidationService;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginDecadev(@Valid @RequestBody LoginDTO loginDTO, BindingResult result) {
+
+        ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
+        if(errors != null) return errors;
+
+        Identification identification = identificationService.login(loginDTO);
+        return new ResponseEntity<>(identification, HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerDecadev(@Valid @RequestBody RegisterDTO registerDTO, BindingResult result) {
+
+        ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
+        if(errors != null) return errors;
+
+        Identification identification = identificationService.register(registerDTO);
+        return new ResponseEntity<>(identification, HttpStatus.CREATED);
     }
 
     @PostMapping

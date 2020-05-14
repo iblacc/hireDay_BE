@@ -32,5 +32,11 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DecadevPasswordException.class)
+    protected ResponseEntity<Object> handleDecadevPasswordException(DecadevPasswordException ex) {
+        DecadevPasswordExceptionResponse response = new DecadevPasswordExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 
 }

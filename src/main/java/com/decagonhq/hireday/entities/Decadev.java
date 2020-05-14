@@ -1,6 +1,5 @@
 package com.decagonhq.hireday.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;

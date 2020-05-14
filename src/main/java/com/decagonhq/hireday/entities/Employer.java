@@ -22,31 +22,18 @@ public class Employer {
 
     @NotBlank(message = "Please enter organization name")
     @Column(unique = true)
-    private String organizationName;
+    private String companyName;
 
     @Email(message = "Email needs to be provided")
     @NotBlank(message = "Email is required")
     @Column(unique = true)
     private String email;
 
-    private String role;
-
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
-    @ElementCollection
-    private List<String> technologies = new ArrayList<>();
-
-    @ElementCollection
-    @CollectionTable(name = "stack_number_mapping",
-            joinColumns = {@JoinColumn(name = "employer_id", referencedColumnName = "id")})
-    @MapKeyColumn(name = "stack")
-    @Column(name = "number")
-    private Map<String, Integer> interest = new HashMap<>();
-
-    @NotNull(message = "Meeting date needs to be specified")
-    @JsonFormat(pattern = "yyyy-mm-dd")
-    private Date meetingDate;
+    @Column(updatable = false)
+    private Date create_At;
 
     public Employer() {
     }
@@ -75,12 +62,12 @@ public class Employer {
         this.lastName = lastName;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
+    public String getCompanyName() {
+        return companyName;
     }
 
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 
     public String getEmail() {
@@ -90,15 +77,6 @@ public class Employer {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -107,27 +85,16 @@ public class Employer {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<String> getTechnologies() {
-        return technologies;
+    public Date getCreate_At() {
+        return create_At;
     }
 
-    public void setTechnologies(List<String> technologies) {
-        this.technologies = technologies;
+    public void setCreate_At(Date create_At) {
+        this.create_At = create_At;
     }
 
-    public Map<String, Integer> getInterest() {
-        return interest;
-    }
-
-    public void setInterest(Map<String, Integer> talent) {
-        this.interest = talent;
-    }
-
-    public Date getMeetingDate() {
-        return meetingDate;
-    }
-
-    public void setMeetingDate(Date meetingDate) {
-        this.meetingDate = meetingDate;
+    @PrePersist
+    protected void onCreate(){
+        this.create_At = new Date();
     }
 }

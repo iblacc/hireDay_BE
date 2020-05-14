@@ -49,7 +49,7 @@ public class EmployerService {
         }
 
         Employer foundEmployer = employer1.get();
-        if(foundEmployer.getOrganizationName().equals(employer.getOrganizationName()) && foundEmployer.getEmail().equals(employer.getEmail())) {
+        if(foundEmployer.getCompanyName().equals(employer.getCompanyName()) && foundEmployer.getEmail().equals(employer.getEmail())) {
             return employerRepository.save(employer);
         }
 

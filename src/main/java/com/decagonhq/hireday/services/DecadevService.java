@@ -1,6 +1,7 @@
 package com.decagonhq.hireday.services;
 
 import com.decagonhq.hireday.entities.Decadev;
+import com.decagonhq.hireday.entities.Identification;
 import com.decagonhq.hireday.exceptions.DecadevIdException;
 import com.decagonhq.hireday.exceptions.DecadevNotFoundException;
 import com.decagonhq.hireday.repositories.DecadevRepository;
@@ -23,12 +24,16 @@ public class DecadevService {
     }
 
     public Decadev createDecadev(Decadev decadev) {
-        if(!identificationRepository.existsIdentificationByDecaId(decadev.getDecaId())) {
+        Optional<Identification> identification = identificationRepository.findByDecaId(decadev.getDecaId());
+        if(identification.isEmpty()) {
             throw new DecadevIdException("Invalid Decadev ID number");
         }
-        try {
-            return decadevRepository.save(decadev);
 
+        try {
+            Decadev saveDecadev = decadevRepository.save(decadev);
+            Identification foundId = identification.get();
+            foundId.setProfileCreated(true);
+            return saveDecadev;
         } catch (Exception ex) {
             throw new DecadevIdException("Decadev already exists");
         }
