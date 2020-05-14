@@ -1,16 +1,18 @@
 package com.decagonhq.hireday.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-public class Login {
+public class LoginDTO {
 
     @NotBlank(message = "Decadev ID is required")
     private String decaId;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    public Login() {
+    public LoginDTO() {
     }
 
     public String getDecaId() {

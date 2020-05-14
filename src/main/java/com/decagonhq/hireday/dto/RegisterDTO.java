@@ -1,19 +1,22 @@
 package com.decagonhq.hireday.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-public class Register {
+public class RegisterDTO {
 
     @NotBlank(message = "Decadev ID is required")
     private String decaId;
 
     @NotBlank(message = "Password is required")
+    @Size(min = 6, message = "Passwords must be at least 6 characters")
     private String password;
 
     @NotBlank(message = "Confirm password is required")
+    @Size(min = 6, message = "Passwords must be at least 6 characters")
     private String confirmPassword;
 
-    public Register() {
+    public RegisterDTO() {
     }
 
     public String getDecaId() {
@@ -40,7 +43,7 @@ public class Register {
         this.confirmPassword = confirmPassword;
     }
 
-    public boolean testPasswords() {
+    public boolean comparePasswords() {
         return this.password.equals(this.confirmPassword);
     }
 
