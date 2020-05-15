@@ -57,21 +57,21 @@ public class IdentificationService {
         }
     }
 
-    public Identification getIdentification(Long id) {
-        Optional<Identification> identification = identificationRepository.findById(id);
+    public Identification getIdentificationByDecaId(String decaId) {
+        Optional<Identification> identification = identificationRepository.findByDecaId(decaId);
 
         if(identification.isPresent()) {
             return identification.get();
         }
 
-        throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
+        throw new DecadevNotFoundException("Identification with decaId '" + decaId + "' could not be found");
     }
 
     public Iterable<Identification> getAllIdentification() {
         return identificationRepository.findAll();
     }
 
-    public Identification updatedentification(long id, Identification identification) {
+    public Identification updateIdentification(long id, Identification identification) {
         Optional<Identification> identification1 = identificationRepository.findById(id);
 
         if(identification1.isEmpty()) {
@@ -87,6 +87,16 @@ public class IdentificationService {
         } catch (Exception ex) {
             throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
         }
+    }
+
+    private Identification getIdentification(Long id) {
+        Optional<Identification> identification = identificationRepository.findById(id);
+
+        if(identification.isPresent()) {
+            return identification.get();
+        }
+
+        throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
     }
 
     private Identification verifyDecaId(String decaId) {

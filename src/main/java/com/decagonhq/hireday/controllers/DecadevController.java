@@ -61,26 +61,26 @@ public class DecadevController {
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{decaId}")
-    public ResponseEntity<?> getDecadev(@PathVariable("decaId") String decaId) {
+    @GetMapping
+    public ResponseEntity<?> getDecadev(@RequestParam("decaId") String decaId) {
         Decadev decadev = decadevService.getDecadev(decaId);
         return new ResponseEntity<>(decadev, HttpStatus.OK);
     }
 
-    @GetMapping("/stacks/{stack}")
-    public ResponseEntity<Iterable<?>> getDecadevsByStack(@PathVariable("stack") String stack) {
+    @GetMapping("/stacks")
+    public ResponseEntity<Iterable<?>> getDecadevsByStack(@RequestParam("stack") String stack) {
         Iterable<Decadev> decadevs = decadevService.getDecadevsByStack(stack);
         return new ResponseEntity<>(decadevs, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Iterable<?>> getAllDecadevs() {
         Iterable<Decadev> decadevs = decadevService.getAllDecadevs();
         return new ResponseEntity<>(decadevs, HttpStatus.OK);
     }
 
-    @PutMapping("{stackId}")
-    public ResponseEntity<?> updateDecadev(@PathVariable("stackId") String decaId, @Valid @RequestBody Decadev decadev, BindingResult result) {
+    @PutMapping
+    public ResponseEntity<?> updateDecadev(@RequestParam("decaId") String decaId, @Valid @RequestBody Decadev decadev, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
@@ -89,8 +89,8 @@ public class DecadevController {
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("{decaId}")
-    public ResponseEntity<?> deleteDecadev(@PathVariable("decaId") String decaId) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteDecadev(@RequestParam("decaId") String decaId) {
         decadevService.deleteDecadev(decaId);
         return new ResponseEntity<>("Decadev with ID '" + decaId + "' was deleted", HttpStatus.OK);
     }

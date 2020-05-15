@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://hiredaydb.ckzr4j0zspt4.us-east-2.rds.amazonaws.com:5432/hire_day_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://hiringdaydb.ckqem7tcynv0.eu-west-3.rds.amazonaws.com:5432/hiringdaydb
+    username: decagon
+    password: decagonhq
 
   jpa:
     hibernate:

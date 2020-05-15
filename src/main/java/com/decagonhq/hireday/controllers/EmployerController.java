@@ -36,20 +36,21 @@ public class EmployerController {
         return new ResponseEntity<>(employer1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getEmployer(@PathVariable("id") long id) {
-        Employer employer = employerService.getEmployer(id);
+    @GetMapping
+    public ResponseEntity<?> getEmployer(@RequestParam("email") String email) {
+        System.out.println(email);
+        Employer employer = employerService.getEmployerByEmail(email);
         return new ResponseEntity<>(employer, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<Iterable<?>> getAllEmployers() {
         Iterable<Employer> employers = employerService.getAllEmployers();
         return new ResponseEntity<>(employers, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateEmployer(@PathVariable("id") long id, @Valid @RequestBody Employer employer, BindingResult result) {
+    @PutMapping
+    public ResponseEntity<?> updateEmployer(@RequestParam("id") long id, @Valid @RequestBody Employer employer, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
@@ -58,8 +59,8 @@ public class EmployerController {
         return new ResponseEntity<>(employer1, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmployer(@PathVariable("id") long id) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteEmployer(@RequestParam("id") long id) {
         employerService.deleteEmployer(id);
         return new ResponseEntity<>("Employer with ID '" + id + "' was deleted", HttpStatus.OK);
     }

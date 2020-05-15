@@ -36,26 +36,26 @@ public class IdentificationController {
         return new ResponseEntity<>(identification1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getIdentification(@PathVariable("id") long id) {
-        Identification identification = identificationService.getIdentification(id);
+    @GetMapping
+    public ResponseEntity<?> getIdentification(@RequestParam("decaId") String decaId) {
+        Identification identification = identificationService.getIdentificationByDecaId(decaId);
         return new ResponseEntity<>(identification, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("all")
     public ResponseEntity<Iterable<?>> getAllIdentification() {
         Iterable<Identification> identifications = identificationService.getAllIdentification();
         return new ResponseEntity<>(identifications, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateIdentification(@PathVariable("id") long id, @Valid @RequestBody Identification identification) {
-        Identification identification1 = identificationService.updatedentification(id, identification);
+    @PutMapping
+    public ResponseEntity<?> updateIdentification(@RequestParam("id") long id, @Valid @RequestBody Identification identification) {
+        Identification identification1 = identificationService.updateIdentification(id, identification);
         return new ResponseEntity<>(identification1, HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteIdentification(@PathVariable("id") long id) {
+    @DeleteMapping
+    public ResponseEntity<?> deleteIdentification(@RequestParam("id") long id) {
         identificationService.deleteIdentification(id);
         return new ResponseEntity<>("Identification with ID '" + id + "' was deleted", HttpStatus.OK);
     }

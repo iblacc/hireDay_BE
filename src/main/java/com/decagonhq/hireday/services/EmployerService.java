@@ -2,7 +2,7 @@ package com.decagonhq.hireday.services;
 
 import com.decagonhq.hireday.entities.Employer;
 import com.decagonhq.hireday.exceptions.EmployerNotFoundException;
-import com.decagonhq.hireday.exceptions.OrganizationException;
+import com.decagonhq.hireday.exceptions.CompanyException;
 import com.decagonhq.hireday.repositories.EmployerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,15 +23,15 @@ public class EmployerService {
         try {
             return employerRepository.save(employer);
         } catch (Exception ex) {
-            throw new OrganizationException("Organization name and/or email already exists");
+            throw new CompanyException("Organization name and/or email already exists");
         }
     }
 
-    public Employer getEmployer(long id) {
-        Optional<Employer> employer = employerRepository.findById(id);
+    public Employer getEmployerByEmail(String email) {
+        Optional<Employer> employer = employerRepository.findByEmail(email);
 
         if(employer.isEmpty()) {
-            throw new EmployerNotFoundException("Employer with ID '" + id + "' could not be found");
+            throw new EmployerNotFoundException("Employer with email '" + email + "' could not be found");
         }
 
         return employer.get();
@@ -53,12 +53,17 @@ public class EmployerService {
             return employerRepository.save(employer);
         }
 
-        throw new OrganizationException("Organization name and/or email not updatable");
+        throw new CompanyException("Organization name and/or email not updatable");
     }
 
     public void deleteEmployer(long id) {
+
+        Optional<Employer> employer = employerRepository.findById(id);
+        if(employer.isEmpty()) {
+            throw new EmployerNotFoundException("Employer with ID '" + id + "' could not be found");
+        }
         try {
-            employerRepository.delete(getEmployer(id));
+            employerRepository.delete(employer.get());
         } catch (Exception ex) {
             throw new EmployerNotFoundException("Employer with ID '" + id + "' could not be found");
         }

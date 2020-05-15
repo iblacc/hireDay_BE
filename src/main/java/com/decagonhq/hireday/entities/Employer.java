@@ -20,7 +20,7 @@ public class Employer {
     private String firstName;
     private String lastName;
 
-    @NotBlank(message = "Please enter organization name")
+    @NotBlank(message = "Please enter company name")
     @Column(unique = true)
     private String companyName;
 

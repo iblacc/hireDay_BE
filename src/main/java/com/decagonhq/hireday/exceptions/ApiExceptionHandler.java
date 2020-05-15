@@ -20,9 +20,9 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(OrganizationException.class)
-    protected ResponseEntity<Object> handleOrganizationNameException(OrganizationException ex) {
-        OrganizationExceptionResponse response = new OrganizationExceptionResponse(ex.getMessage());
+    @ExceptionHandler(CompanyException.class)
+    protected ResponseEntity<Object> handleOrganizationNameException(CompanyException ex) {
+        CompanyExceptionResponse response = new CompanyExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
