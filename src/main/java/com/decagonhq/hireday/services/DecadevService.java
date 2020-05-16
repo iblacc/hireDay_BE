@@ -26,13 +26,18 @@ public class DecadevService {
     public Decadev createDecadev(Decadev decadev) {
         Optional<Identification> identification = identificationRepository.findByDecaId(decadev.getDecaId());
         if(identification.isEmpty()) {
-            throw new DecadevIdException("Invalid Decadev ID number");
+            throw new DecadevIdException("Invalid Decadev ID number '" + decadev.getDecaId() + "'");
+        }
+
+        if(!identification.get().isAccountCreated()) {
+            throw new DecadevIdException("Decadev account with ID '" + decadev.getDecaId() + "' has not been created")
         }
 
         try {
             Decadev saveDecadev = decadevRepository.save(decadev);
             Identification foundId = identification.get();
             foundId.setProfileCreated(true);
+            identificationRepository.save(foundId);
             return saveDecadev;
         } catch (Exception ex) {
             throw new DecadevIdException("Decadev already exists");
