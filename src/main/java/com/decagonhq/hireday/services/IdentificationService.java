@@ -26,6 +26,10 @@ public class IdentificationService {
     public Identification login(LoginDTO loginDTO) {
 
         Identification foundId = verifyDecaId(loginDTO.getDecaId());
+
+        if(foundId.getPassword() == null) {
+            throw new DecadevIdException("Decadev account with ID '" + loginDTO.getDecaId() + "' has not been created");
+        }
         boolean isValid = verifyHash(loginDTO.getPassword(), foundId.getPassword());
 
         if(!isValid) {
