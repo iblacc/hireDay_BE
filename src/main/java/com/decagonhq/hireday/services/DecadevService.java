@@ -30,7 +30,7 @@ public class DecadevService {
         }
 
         if(!identification.get().isAccountCreated()) {
-            throw new DecadevIdException("Decadev account with ID '" + decadev.getDecaId() + "' has not been created")
+            throw new DecadevIdException("Decadev account with ID '" + decadev.getDecaId() + "' has not been created");
         }
 
         try {
