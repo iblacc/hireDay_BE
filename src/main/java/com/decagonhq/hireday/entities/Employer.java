@@ -1,12 +1,10 @@
 package com.decagonhq.hireday.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Entity
@@ -16,20 +14,20 @@ public class Employer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank(message = "Please provide your first name")
     private String firstName;
+
+    @NotBlank(message = "Please provide your last name")
     private String lastName;
 
     @NotBlank(message = "Please enter company name")
-    @Column(unique = true)
     private String companyName;
 
-    @Email(message = "Email needs to be provided")
+    @Email(message = "Correct email needs to be provided")
     @NotBlank(message = "Email is required")
     @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
     @Column(updatable = false)

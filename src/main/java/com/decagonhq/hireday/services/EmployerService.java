@@ -23,7 +23,7 @@ public class EmployerService {
         try {
             return employerRepository.save(employer);
         } catch (Exception ex) {
-            throw new CompanyException("Organization name and/or email already exists");
+            throw new CompanyException("Company email already exists");
         }
     }
 

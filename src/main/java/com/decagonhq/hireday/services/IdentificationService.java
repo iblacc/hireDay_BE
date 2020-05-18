@@ -2,10 +2,12 @@ package com.decagonhq.hireday.services;
 
 import com.decagonhq.hireday.dto.LoginDTO;
 import com.decagonhq.hireday.dto.RegisterDTO;
+import com.decagonhq.hireday.entities.Decadev;
 import com.decagonhq.hireday.entities.Identification;
 import com.decagonhq.hireday.exceptions.DecadevIdException;
-import com.decagonhq.hireday.exceptions.DecadevNotFoundException;
 import com.decagonhq.hireday.exceptions.DecadevPasswordException;
+import com.decagonhq.hireday.exceptions.IdNotFoundException;
+import com.decagonhq.hireday.repositories.DecadevRepository;
 import com.decagonhq.hireday.repositories.IdentificationRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,12 @@ import java.util.Optional;
 public class IdentificationService {
 
     private IdentificationRepository identificationRepository;
+    private DecadevRepository decadevRepository;
 
     @Autowired
-    public IdentificationService(IdentificationRepository identificationRepository) {
+    public IdentificationService(IdentificationRepository identificationRepository, DecadevRepository decadevRepository) {
         this.identificationRepository = identificationRepository;
+        this.decadevRepository = decadevRepository;
     }
 
     public Identification login(LoginDTO loginDTO) {
@@ -68,7 +72,7 @@ public class IdentificationService {
             return identification.get();
         }
 
-        throw new DecadevNotFoundException("Identification with decaId '" + decaId + "' could not be found");
+        throw new IdNotFoundException("Identification with decaId '" + decaId + "' could not be found");
     }
 
     public Iterable<Identification> getAllIdentification() {
@@ -79,18 +83,23 @@ public class IdentificationService {
         Optional<Identification> identification1 = identificationRepository.findById(id);
 
         if(identification1.isEmpty()) {
-            throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
+            throw new IdNotFoundException("Identification with ID '" + id + "' could not be found");
         }
 
         return identificationRepository.save(identification);
     }
 
     public void deleteIdentification(Long id) {
+        Identification identification = getIdentification(id);
+
         try {
-            identificationRepository.delete(getIdentification(id));
+            identificationRepository.delete(identification);
         } catch (Exception ex) {
-            throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
+            throw new IdNotFoundException("Identification with ID '" + id + "' could not be found");
         }
+
+        Optional<Decadev> decadev = decadevRepository.findByDecaId(identification.getDecaId());
+        decadev.ifPresent(value -> decadevRepository.delete(value));
     }
 
     private Identification getIdentification(Long id) {
@@ -100,7 +109,7 @@ public class IdentificationService {
             return identification.get();
         }
 
-        throw new DecadevNotFoundException("Identification with ID '" + id + "' could not be found");
+        throw new IdNotFoundException("Identification with ID '" + id + "' could not be found");
     }
 
     private Identification verifyDecaId(String decaId) {

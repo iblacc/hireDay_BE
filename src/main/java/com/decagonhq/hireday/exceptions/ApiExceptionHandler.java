@@ -38,5 +38,9 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-
+    @ExceptionHandler(IdNotFoundException.class)
+    protected ResponseEntity<Object> handleIdNotFoundException(IdNotFoundException ex) {
+        IdNotFoundExceptionResponse response = new IdNotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }
