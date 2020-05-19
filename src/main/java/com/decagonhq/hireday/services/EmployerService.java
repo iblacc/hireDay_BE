@@ -13,15 +13,19 @@ import java.util.Optional;
 public class EmployerService {
 
     private EmployerRepository employerRepository;
+    private EmailService emailService;
 
     @Autowired
-    public EmployerService(EmployerRepository employerRepository) {
+    public EmployerService(EmployerRepository employerRepository, EmailService emailService) {
         this.employerRepository = employerRepository;
+        this.emailService = emailService;
     }
 
     public Employer createEmployer(Employer employer) {
         try {
-            return employerRepository.save(employer);
+            Employer saveEmployer = employerRepository.save(employer);
+            emailService.send(employer.getFirstName(), employer.getLastName(), employer.getEmail());
+            return saveEmployer;
         } catch (Exception ex) {
             throw new CompanyException("Company email already exists");
         }
