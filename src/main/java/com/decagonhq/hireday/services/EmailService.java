@@ -23,12 +23,12 @@ public class EmailService {
     private Configuration config;
 
     @Autowired
-    public EmailService(JavaMailSender sender, Configuration config) throws IOException, MessagingException, TemplateException {
+    public EmailService(JavaMailSender sender, Configuration config) throws MessagingException, TemplateException {
         this.sender = sender;
         this.config = config;
     }
 
-    public void send() {
+    public void send(String firstName, String lastName, String employerEmail) {
 
         MimeMessage message = sender.createMimeMessage();
         try {
@@ -37,13 +37,13 @@ public class EmailService {
                     StandardCharsets.UTF_8.name());
 
             Map<String, Object> model = new HashMap<>();
-            model.put("firstName", "Odudu");
-            model.put("lastName", "Abbasi");
+            model.put("firstName", firstName);
+            model.put("lastName", lastName);
 
             Template t = config.getTemplate("email-template.ftl");
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
-            helper.setTo("arewacode@gmail.com");
+            helper.setTo(employerEmail);
             helper.setText(html, true);
             helper.setSubject("Decagon Hiring Day");
             helper.setFrom("4transcolour@gmail.com");
