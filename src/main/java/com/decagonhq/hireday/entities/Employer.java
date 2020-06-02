@@ -23,6 +23,9 @@ public class Employer {
     @NotBlank(message = "Please enter company name")
     private String companyName;
 
+    @NotBlank(message = "Please provide your role")
+    private String role;
+
     @Email(message = "Correct email needs to be provided")
     @NotBlank(message = "Email is required")
     @Column(unique = true)
@@ -66,6 +69,14 @@ public class Employer {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
