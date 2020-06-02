@@ -1,10 +1,11 @@
 package com.decagonhq.hireday.services;
 
 import com.decagonhq.hireday.entities.Employer;
-import com.decagonhq.hireday.exceptions.EmployerNotFoundException;
 import com.decagonhq.hireday.exceptions.CompanyException;
+import com.decagonhq.hireday.exceptions.EmployerNotFoundException;
 import com.decagonhq.hireday.repositories.EmployerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,9 +23,19 @@ public class EmployerService {
     }
 
     public Employer createEmployer(Employer employer) {
+        Employer saveEmployer = null;
         try {
-            Employer saveEmployer = employerRepository.save(employer);
+            saveEmployer = employerRepository.save(employer);
             emailService.send(employer.getFirstName(), employer.getLastName(), employer.getEmail());
+            return saveEmployer;
+        } catch (MailAuthenticationException ex) {
+            System.out.println(
+                    "Failed to send email to the registered employer.\n" +
+                    "You have to configuration SMTP email integration from the email provider.\n" +
+                    "For Gmail, in addition to SMTP configuration, 'Less secure app access' needs to be enable at " +
+                    "the following url: \n" +
+                    "https://myaccount.google.com/u/0/lesssecureapps?pli=1&pageId=none"
+            );
             return saveEmployer;
         } catch (Exception ex) {
             throw new CompanyException("Company email already exists");
