@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,9 @@ public class Decadev {
 
     @ElementCollection
     private List<String> education = new ArrayList<>();
+
+    @Column(length = 3000)
+    @Size(max = 3000, message = "Bio should not be more than 3000 characters")
     private String bio;
 
     @NotBlank(message = "Stack is required")
