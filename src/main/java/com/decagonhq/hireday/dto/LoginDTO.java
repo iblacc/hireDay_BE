@@ -1,12 +1,14 @@
 package com.decagonhq.hireday.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class LoginDTO {
 
+    @Email(message = "Email needs to be provided")
     @NotBlank(message = "Decadev ID is required")
-    private String decaId;
+    private String email;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
@@ -15,12 +17,12 @@ public class LoginDTO {
     public LoginDTO() {
     }
 
-    public String getDecaId() {
-        return decaId;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDecaId(String decaId) {
-        this.decaId = decaId;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -34,7 +36,7 @@ public class LoginDTO {
     @Override
     public String toString() {
         return "Login{" +
-                "decaId='" + decaId + '\'' +
+                "decaId='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
