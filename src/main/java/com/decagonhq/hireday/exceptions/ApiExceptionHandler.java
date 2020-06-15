@@ -20,9 +20,9 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CompanyException.class)
-    protected ResponseEntity<Object> handleOrganizationNameException(CompanyException ex) {
-        CompanyExceptionResponse response = new CompanyExceptionResponse(ex.getMessage());
+    @ExceptionHandler(UnexpectedErrorException.class)
+    protected ResponseEntity<Object> handleUnexpectedErrorException(UnexpectedErrorException ex) {
+        UnexpectedErrorExceptionResponse response = new UnexpectedErrorExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -32,15 +32,21 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(DecadevPasswordException.class)
-    protected ResponseEntity<Object> handleDecadevPasswordException(DecadevPasswordException ex) {
-        DecadevPasswordExceptionResponse response = new DecadevPasswordExceptionResponse(ex.getMessage());
+    @ExceptionHandler(UserPasswordException.class)
+    protected ResponseEntity<Object> handleDecadevPasswordException(UserPasswordException ex) {
+        UserPasswordExceptionResponse response = new UserPasswordExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IdNotFoundException.class)
-    protected ResponseEntity<Object> handleIdNotFoundException(IdNotFoundException ex) {
-        IdNotFoundExceptionResponse response = new IdNotFoundExceptionResponse(ex.getMessage());
+    @ExceptionHandler(UserAlreadyExistException.class)
+    protected ResponseEntity<Object> handleUserAlreadyExistException(UserAlreadyExistException ex) {
+        UserAlreadyExistExceptionResponse response = new UserAlreadyExistExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AdminNotFoundException.class)
+    protected ResponseEntity<Object> handleAdminNotFoundException(AdminNotFoundException ex) {
+        AdminNotFoundExceptionResponse response = new AdminNotFoundExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
