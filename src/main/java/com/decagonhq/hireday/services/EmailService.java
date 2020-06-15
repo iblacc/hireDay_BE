@@ -1,5 +1,6 @@
 package com.decagonhq.hireday.services;
 
+import com.decagonhq.hireday.config.AppConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -21,11 +22,13 @@ public class EmailService {
 
     private JavaMailSender sender;
     private Configuration config;
+    private AppConfig appConfig;
 
     @Autowired
-    public EmailService(JavaMailSender sender, Configuration config) throws MessagingException, TemplateException {
+    public EmailService(JavaMailSender sender, Configuration config, AppConfig appConfig) throws MessagingException, TemplateException {
         this.sender = sender;
         this.config = config;
+        this.appConfig = appConfig;
     }
 
     public void send(String firstName, String lastName, String employerEmail) {
@@ -40,13 +43,13 @@ public class EmailService {
             model.put("firstName", firstName);
             model.put("lastName", lastName);
 
-            Template t = config.getTemplate("email-template.ftl");
+            Template t = config.getTemplate(appConfig.getEmailTemplate());
             String html = FreeMarkerTemplateUtils.processTemplateIntoString(t, model);
 
             helper.setTo(employerEmail);
             helper.setText(html, true);
-            helper.setSubject("Decagon Hiring Day");
-            helper.setFrom("4transcolour@gmail.com");
+            helper.setSubject(appConfig.getEmailSubject());
+            helper.setFrom(appConfig.getEmailSender());
             sender.send(message);
 
         } catch (MessagingException | IOException | TemplateException e) {
