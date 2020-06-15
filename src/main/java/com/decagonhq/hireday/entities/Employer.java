@@ -1,15 +1,20 @@
 package com.decagonhq.hireday.entities;
 
-import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
+import static com.decagonhq.hireday.security.UserRole.EMPLOYER;
+
 @Entity
-@DynamicUpdate
-public class Employer {
+@Table(name = "employers")
+public class Employer implements UserDetails, Details {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,10 +38,28 @@ public class Employer {
 
     private String phoneNumber;
 
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<SimpleGrantedAuthority> grantedAuthorities;
+
     @Column(updatable = false)
     private Date create_At;
 
+    private Date update_At;
+
     public Employer() {
+        this.grantedAuthorities = EMPLOYER.getGrantedAuthorities();
+    }
+
+    public Employer(String firstName, String lastName, String email, String companyName, String role, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.companyName = companyName;
+        this.role = role;
+        this.password = password;
+        this.grantedAuthorities = EMPLOYER.getGrantedAuthorities();
     }
 
     public Long getId() {
@@ -94,6 +117,14 @@ public class Employer {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUpdate_At(Date update_At) {
+        this.update_At = update_At;
+    }
+
     public Date getCreate_At() {
         return create_At;
     }
@@ -105,5 +136,52 @@ public class Employer {
     @PrePersist
     protected void onCreate(){
         this.create_At = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.update_At = new Date();
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.grantedAuthorities;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
     }
 }

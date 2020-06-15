@@ -1,25 +1,27 @@
 package com.decagonhq.hireday.entities;
 
-import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import static com.decagonhq.hireday.security.UserRole.DECADEV;
 
 @Entity
-@DynamicUpdate
-public class Decadev {
+@Table(name = "decadevs")
+public class Decadev implements UserDetails, Details {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Decadev ID number is required")
-    @Column(updatable = false, unique = true)
+    @Column(unique = true)
     private String decaId;
 
     @NotBlank(message = "Please enter your first name")
@@ -32,6 +34,8 @@ public class Decadev {
     @NotBlank(message = "Email is required")
     @Column(unique = true)
     private String email;
+
+    private String password;
 
     @ElementCollection
     private List<String> education = new ArrayList<>();
@@ -54,6 +58,9 @@ public class Decadev {
     private String videoUrl;
     private String capabilities;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<SimpleGrantedAuthority> grantedAuthorities;
+
     @ElementCollection
     private List<String> interests = new ArrayList<>();
 
@@ -66,6 +73,17 @@ public class Decadev {
     private Date update_At;
 
     public Decadev() {
+        this.grantedAuthorities = DECADEV.getGrantedAuthorities();
+    }
+
+    public Decadev(String firstName, String lastName, String decaId, String email, String stack, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.decaId = decaId;
+        this.email = email;
+        this.stack = stack;
+        this.password = password;
+        this.grantedAuthorities = DECADEV.getGrantedAuthorities();
     }
 
     public Long getId() {
@@ -108,6 +126,9 @@ public class Decadev {
         this.email = email;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public List<String> getEducation() {
         return education;
@@ -237,5 +258,47 @@ public class Decadev {
     @PreUpdate
     protected void onUpdate(){
         this.update_At = new Date();
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.grantedAuthorities;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
     }
 }

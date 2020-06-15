@@ -1,19 +1,18 @@
 package com.decagonhq.hireday.controllers;
 
-import com.decagonhq.hireday.dto.LoginDTO;
-import com.decagonhq.hireday.dto.RegisterDTO;
+import com.decagonhq.hireday.dto.DecadevRegisterDTO;
 import com.decagonhq.hireday.entities.Decadev;
-import com.decagonhq.hireday.entities.Identification;
 import com.decagonhq.hireday.services.DecadevService;
-import com.decagonhq.hireday.services.IdentificationService;
 import com.decagonhq.hireday.services.RequestBodyValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("api/v1/decadevs")
@@ -21,78 +20,60 @@ import javax.validation.Valid;
 public class DecadevController {
 
     private DecadevService decadevService;
-    private IdentificationService identificationService;
     private RequestBodyValidationService requestBodyValidationService;
 
     @Autowired
-    public DecadevController(DecadevService decadevService, IdentificationService identificationService, RequestBodyValidationService requestBodyValidationService) {
+    public DecadevController(DecadevService decadevService, RequestBodyValidationService requestBodyValidationService) {
         this.decadevService = decadevService;
-        this.identificationService = identificationService;
         this.requestBodyValidationService = requestBodyValidationService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginDecadev(@Valid @RequestBody LoginDTO loginDTO, BindingResult result) {
-
-        ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
-        if(errors != null) return errors;
-
-        Identification identification = identificationService.login(loginDTO);
-        return new ResponseEntity<>(identification, HttpStatus.OK);
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<?> registerDecadev(@Valid @RequestBody RegisterDTO registerDTO, BindingResult result) {
+    public ResponseEntity<?> registerDecadev(@Valid @RequestBody DecadevRegisterDTO decadevRegisterDTO, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Identification identification = identificationService.register(registerDTO);
-        return new ResponseEntity<>(identification, HttpStatus.CREATED);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createDecadev(@Valid @RequestBody Decadev decadev, BindingResult result) {
-
-        ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
-        if(errors != null) return errors;
-
-        Decadev decadev1 = decadevService.createDecadev(decadev);
-        return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
+        Decadev decadev = decadevService.registerDecadev(decadevRegisterDTO);
+        return new ResponseEntity<>(decadev, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<?> getDecadev(@RequestParam("decaId") String decaId) {
-        Decadev decadev = decadevService.getDecadev(decaId);
+    @PreAuthorize("hasAuthority('decadev:read')")
+    public ResponseEntity<?> getDecadev(@RequestParam("email") String email) {
+        Decadev decadev = decadevService.getDecadev(email);
         return new ResponseEntity<>(decadev, HttpStatus.OK);
     }
 
     @GetMapping("/stacks")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_EMPLOYER')")
     public ResponseEntity<Iterable<?>> getDecadevsByStack(@RequestParam("stack") String stack) {
         Iterable<Decadev> decadevs = decadevService.getDecadevsByStack(stack);
         return new ResponseEntity<>(decadevs, HttpStatus.OK);
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_EMPLOYER')")
     public ResponseEntity<Iterable<?>> getAllDecadevs() {
         Iterable<Decadev> decadevs = decadevService.getAllDecadevs();
         return new ResponseEntity<>(decadevs, HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateDecadev(@RequestParam("decaId") String decaId, @Valid @RequestBody Decadev decadev, BindingResult result) {
+    @PreAuthorize("hasRole('ROLE_DECADEV')")
+    public ResponseEntity<?> updateDecadev(@RequestParam("id") long id, @Valid @RequestBody Decadev decadev, Principal principal, BindingResult result) {
 
         ResponseEntity<?> errors = requestBodyValidationService.requestBodyValidation(result);
         if(errors != null) return errors;
 
-        Decadev decadev1 = decadevService.updateDecadev(decaId ,decadev);
+        Decadev decadev1 = decadevService.updateDecadev(id, decadev, principal.getName());
         return new ResponseEntity<>(decadev1, HttpStatus.CREATED);
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteDecadev(@RequestParam("decaId") String decaId) {
-        decadevService.deleteDecadev(decaId);
-        return new ResponseEntity<>("Decadev with ID '" + decaId + "' was deleted", HttpStatus.OK);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteDecadev(@RequestParam("id") long id) {
+        decadevService.deleteDecadev(id);
+        return new ResponseEntity<>("Decadev with ID '" + id + "' was removed successfully", HttpStatus.OK);
     }
-
 }
