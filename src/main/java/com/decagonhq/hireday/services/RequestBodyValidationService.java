@@ -20,7 +20,7 @@ public class RequestBodyValidationService {
             for(FieldError error: result.getFieldErrors()){
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<Map<String, String>>(errors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
 
         return null;
